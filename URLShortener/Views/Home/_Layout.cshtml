@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+@{
+    ViewBag.Title = "URL shortener";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" type="text/css"/>
+</head>
+<body>
+    <div class="jumbotron">
+        <div class="col-md-4">
+            <a href="~/home">Home</a>
+        </div>
+        <div class="col-md-6 offset-md-3">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>
