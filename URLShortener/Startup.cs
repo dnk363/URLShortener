@@ -44,8 +44,16 @@ namespace URLShortener
                     template: "{controller=R}/{action=L}/{id}");
             });
 
-            // обработка ошибок HTTP
-            app.UseStatusCodePages();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Demo2}/{id}");
+            });
+
+            app.UseExceptionHandler("/Home/Error");
+
+            app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
         }

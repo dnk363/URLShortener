@@ -24,18 +24,17 @@ namespace URLShortener.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Index(URLShort urlQ)
+        [HttpGet]
+        public IActionResult ShortUrl(string id)
         {
-            //url.ShortURL = Request.Scheme.ToString() + "://" + Request.Host.ToString() + "/" + GetShortUrl(urlQ.LongURL.ToString());
-            url.ShortURL = GetShortUrl(urlQ.LongURL.ToString()); // Получение короткого кода для ссылки из переданной длинной ссылки
+            url.ShortURL = GetShortUrl(id); // Получение короткого кода для ссылки из переданной длинной ссылки
 
             var b = db.SUrl.FirstOrDefault(p => p.ShortURL == url.ShortURL); // Проверка наличия короткой ссылки в базе
 
             // Если в базе нет короткой ссылки - добавляем
-            if (b == null) 
+            if (b == null)
             {
-                url.LongURL = urlQ.LongURL.ToString();
+                url.LongURL = id;
 
                 db.SUrl.Add(url);
                 db.SaveChangesAsync();
@@ -45,17 +44,9 @@ namespace URLShortener.Controllers
                 url.LongURL = b.LongURL;
             }
 
-            string testurl = Request.Scheme.ToString() + "://" + Request.Host.ToString() + "/r/l/" + GetShortUrl(urlQ.LongURL.ToString());
+            string resulturl = Request.Scheme.ToString() + "://" + Request.Host.ToString() + "/r/l/" + GetShortUrl(id);
 
-            //return View(shortUrl);
-            //return Redirect("/Home/R/" + testurl);
-            //return url.Count.ToString();
-            TempData["lUrl"] = testurl;
-            return RedirectToRoute(new
-            {
-                controller = "Home",
-                action = "R",
-            });
+            return new JsonResult(resulturl);
         }
 
         public IActionResult R()
