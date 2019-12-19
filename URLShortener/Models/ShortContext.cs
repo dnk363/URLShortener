@@ -8,7 +8,7 @@ namespace URLShortener.Models
 {
     public class ShortContext : DbContext
     {
-        public DbSet<URLShort> SUrl { get; set; }
+        public DbSet<URLShort> ShortUrl { get; set; }
         public ShortContext(DbContextOptions<ShortContext> options)
             : base(options)
         {

@@ -10,5 +10,6 @@ namespace URLShortener.Models
         public int Id { get; set; }
         public string LongURL { get; set; }
         public string ShortURL { get; set; }
+        public string UserId { get; set; }
     }
 }

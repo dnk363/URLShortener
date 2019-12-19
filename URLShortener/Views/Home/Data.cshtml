@@ -1,0 +1,17 @@
+﻿@model URLShortener.ViewModel.DataViewModel
+
+<div>
+    <table class="table">
+        <tr>
+            <td>Original URL</td>
+            <td>Short URL</td>
+        </tr>
+        @foreach (URLShort p in Model.UrlData)
+        {
+            <tr>
+                <td><a class="navbar-brand" href="@p.LongURL">@p.LongURL</a></td>
+                <td><a class="navbar-brand" href="@p.ShortURL">@p.ShortURL</a></td>
+            </tr>
+        }
+    </table>
+</div>

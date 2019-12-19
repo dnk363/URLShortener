@@ -19,7 +19,7 @@ namespace URLShortener.Controllers
 
         public void L(string id)
         {
-            var b = db.SUrl.FirstOrDefault(p => p.ShortURL == id);
+            var b = db.ShortUrl.FirstOrDefault(p => p.ShortURL == id);
 
             if (b != null)
             {

@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using URLShortener.Models;  
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using URLShortener.Models;
+using URLShortener.ViewModel;
 
 namespace URLShortener.Controllers
 {
@@ -27,16 +32,31 @@ namespace URLShortener.Controllers
         [HttpGet]
         public IActionResult ShortUrl(string id)
         {
+            id.ToLower();
+            Regex regex = new Regex(@"^http.*");
+            MatchCollection matches = regex.Matches(id);
+            ClaimsPrincipal currentUser = User;
+
+            if (matches.Count == 0)
+            {
+                id = "http://" + id;//Добавление http(s) к длинной ссылке, если его нет
+            }
+
             url.ShortURL = GetShortUrl(id); // Получение короткого кода для ссылки из переданной длинной ссылки
 
-            var b = db.SUrl.FirstOrDefault(p => p.ShortURL == url.ShortURL); // Проверка наличия короткой ссылки в базе
+            var b = db.ShortUrl.FirstOrDefault(p => p.ShortURL == url.ShortURL); // Проверка наличия короткой ссылки в базе
 
             // Если в базе нет короткой ссылки - добавляем
             if (b == null)
             {
                 url.LongURL = id;
 
-                db.SUrl.Add(url);
+                if (currentUser.Identity.Name != null)
+                {
+                    url.UserId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+                }
+
+                db.ShortUrl.Add(url);
                 db.SaveChangesAsync();
             }
             else
@@ -49,14 +69,42 @@ namespace URLShortener.Controllers
             return new JsonResult(resulturl);
         }
 
-        public IActionResult R()
+        public IActionResult FoundError()
         {
             return View();
         }
 
-        public IActionResult FoundError()
+        [Authorize]
+        public IActionResult Data()
+        {
+            ClaimsPrincipal currentUser = User;
+
+            string userId = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            List<URLShort> urlData = db.ShortUrl
+                .Select(c => new URLShort { 
+                                            ShortURL = Request.Scheme.ToString() + "://" + Request.Host.ToString() + "/r/l/" + c.ShortURL, 
+                                            LongURL = c.LongURL, 
+                                            UserId = c.UserId 
+                                          })
+                .Where(p => p.UserId == userId)
+                .ToList();
+
+            DataViewModel ivm = new DataViewModel { UrlData = urlData };
+
+
+            return View(ivm);
+        }
+
+        public IActionResult Privacy()
         {
             return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         private string GetShortUrl(string lUrl)

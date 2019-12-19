@@ -2,22 +2,22 @@
 
 @using (Html.BeginForm())
 {
-        <h1>URL Shortener</h1>
-        <br />
-        <p>By entering in a URL in the text field below, we will create a short URL for you!</p>
-        <br />
-        <form asp-action="Create">
-            <div class="form-horizontal">
-                <div class="input-group input-group-lg">
-                    <div>
-                        <input type="text" id="longurl" class="form-control" placeholder="URL you would like to have shortened" />
-                    </div>
-                    <input type="button" value="Shorten" id="short" class="btn btn-primary" />
+    <h1>URL Shortener</h1>
+    <br />
+    <p>By entering in a URL in the text field below, we will create a short URL for you!</p>
+    <br />
+    <form asp-action="Create">
+        <div class="form-horizontal">
+            <div class="input-group input-group-lg">
+                <div>
+                    <input type="text" id="longurl" class="form-control" placeholder="URL you would like to have shortened" />
                 </div>
-                <fieldset>
-                    <br />
-                    <span id="result"></span>
-                </fieldset>
+                <input type="button" value="Shorten" id="short" class="btn btn-primary" />
             </div>
-        </form>
+            <fieldset>
+                <br />
+                <span id="result"></span>
+            </fieldset>
+        </div>
+    </form>
 }
