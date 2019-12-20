@@ -39,7 +39,7 @@ namespace URLShortener.Controllers
 
             if (matches.Count == 0)
             {
-                id = "http://" + id;//Добавление http(s) к длинной ссылке, если его нет
+                id = "http://" + id;//Добавление http к длинной ссылке, если его нет
             }
 
             url.ShortURL = GetShortUrl(id); // Получение короткого кода для ссылки из переданной длинной ссылки
@@ -93,7 +93,7 @@ namespace URLShortener.Controllers
             DataViewModel ivm = new DataViewModel { UrlData = urlData };
 
 
-            return View(ivm);
+            return PartialView(ivm);
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,4 @@
-﻿@model URLShortener.Models.URLShort
+﻿@model URLShortener.ViewModel.DataViewModel
 
 @using (Html.BeginForm())
 {
@@ -21,3 +21,13 @@
         </div>
     </form>
 }
+
+<button type="button" class="btn btn-primary" data-toggle="modal" id="dataItem">
+    View Data
+</button>
+
+<div class="modal fade" id="dataModalLong">
+    <div class="modal-dialog" id="dataContent" style="width:70%;">
+
+    </div>
+</div>
